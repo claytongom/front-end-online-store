@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Home() {
   return (
@@ -7,6 +8,11 @@ function Home() {
         Digite algum termo de pesquisa ou escolha uma categoria.
 
       </p>
+      <Link to="Cart" data-testid="shopping-cart-button">
+        <button type="button">
+          Carrinho
+        </button>
+      </Link>
     </div>
   );
 }
