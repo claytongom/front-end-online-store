@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Categories from './Categories';
 
 function Home() {
   return (
@@ -13,6 +14,7 @@ function Home() {
           Carrinho
         </button>
       </Link>
+      <Categories />
     </div>
   );
 }
