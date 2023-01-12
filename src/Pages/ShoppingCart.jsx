@@ -13,7 +13,7 @@ class ShoppingCart extends Component {
       sum } = this.props;
     return (
       <div>
-        {cartSaved.length === 0 ? (
+        {!cartSaved ? (
           <p data-testid="shopping-cart-empty-message">
             Seu carrinho está vazio
           </p>
