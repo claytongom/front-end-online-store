@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AsideCats from '../Components/AsideCats';
-import { getProductsFromCategoryAndQuery, getCategories } from '../services/api';
+import { getProductsFromCategoryAndQuery,
+  getCategories, getProductById } from '../services/api';
 import ProductCards from '../Components/ProductCards';
 
 class Home extends React.Component {
@@ -13,11 +14,13 @@ class Home extends React.Component {
       searchQuery: '',
       loaded: true,
       productsList: [],
+      categoryID: '',
     };
 
     this.fetchCategories = this.fetchCategories.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleCategoryClick = this.handleCategoryClick.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +32,18 @@ class Home extends React.Component {
     this.setState({
       searchQuery: value,
     });
+  }
+
+  handleCategoryClick({ target: { value, checked } }) {
+    if (checked) {
+      this.setState(
+        { categoryID: value },
+        () => {
+          console.log(value);
+          this.fetchProductByCatID();
+        },
+      );
+    }
   }
 
   /**
@@ -49,6 +64,13 @@ class Home extends React.Component {
       });
     }
   };
+
+  async fetchProductByCatID() {
+    const { categoryID } = this.state;
+    const data = await getProductById(categoryID);
+    console.log(data.results);
+    this.setState({ productsList: data });
+  }
 
   async fetchCategories() {
     const categories = await getCategories();
@@ -97,7 +119,11 @@ class Home extends React.Component {
         }
         <aside>
           {categories
-            .map((category) => <AsideCats key={ category.id } name={ category.name } />)}
+            .map((category) => (<AsideCats
+              key={ category.id }
+              name={ category.name }
+              handleCategoryClick={ this.handleCategoryClick }
+            />))}
         </aside>
       </div>
     );

@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 
 class AsideCats extends React.Component {
   render() {
-    const { name, id } = this.props;
+    const { name, id, handleCategoryClick } = this.props;
     return (
       <div>
         <label htmlFor={ id }>
@@ -12,6 +12,7 @@ class AsideCats extends React.Component {
             type="radio"
             value={ name }
             data-testid="category"
+            onClick={ handleCategoryClick }
           />
           {name}
         </label>
@@ -25,6 +26,7 @@ export default AsideCats;
 AsideCats.propTypes = {
   name: propTypes.string,
   id: propTypes.string,
+  handleCategoryClick: propTypes.func.isRequired,
 };
 
 AsideCats.defaultProps = {
