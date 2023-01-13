@@ -13,6 +13,7 @@ class AsideCats extends React.Component {
             value={ name }
             data-testid="category"
             onClick={ handleCategoryClick }
+            id={ id }
           />
           {name}
         </label>

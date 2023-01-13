@@ -129,6 +129,7 @@ class Home extends React.Component {
               key={ category.id }
               name={ category.name }
               handleCategoryClick={ this.handleCategoryClick }
+              id={ category.id }
             />))}
         </aside>
       </div>

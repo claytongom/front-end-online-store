@@ -27,14 +27,19 @@ class DetailedProduct extends React.Component {
   render() {
     const { product: { title, thumbnail, price } } = this.state;
     return (
-      <div>
-        <h2 data-testid="product-detail-name">{title}</h2>
-        <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
-        <p data-testid="product-detail-price">{price}</p>
-        <Link to="/shoppingcart">
-          <button type="button" data-testid="shopping-cart-button">Carrinho</button>
+      <>
+        <Link to="/">
+          <button type="button">Home</button>
         </Link>
-      </div>
+        <div>
+          <h2 data-testid="product-detail-name">{title}</h2>
+          <img data-testid="product-detail-image" src={ thumbnail } alt={ title } />
+          <p data-testid="product-detail-price">{price}</p>
+          <Link to="/shoppingcart">
+            <button type="button" data-testid="shopping-cart-button">Carrinho</button>
+          </Link>
+        </div>
+      </>
     );
   }
 }
