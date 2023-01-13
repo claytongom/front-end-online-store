@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AsideCats from '../Components/AsideCats';
-import { getProductsFromCategoryAndQuery, getCategories } from '../services/api';
+import {
+  getProductsFromCategoryAndQuery,
+  getCategories,
+} from '../services/api';
 import ProductCards from '../Components/ProductCards';
 
 class Home extends React.Component {
@@ -9,15 +12,17 @@ class Home extends React.Component {
     super(props);
 
     this.state = {
-      categories: [],
       searchQuery: '',
-      loaded: true,
+      categoriesList: [],
+      categoryID: '',
       productsList: [],
+      loaded: true,
     };
 
     this.fetchCategories = this.fetchCategories.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleCategoryClick = this.handleCategoryClick.bind(this);
   }
 
   componentDidMount() {
@@ -25,14 +30,25 @@ class Home extends React.Component {
   }
 
   handleChange({ target }) {
-    const { value } = target;
+    const { name, value } = target;
     this.setState({
-      searchQuery: value,
+      [name]: value,
     });
   }
 
+  handleCategoryClick({ target: { value, checked } }) {
+    if (checked) {
+      this.setState(
+        { categoryID: value },
+        () => {
+          this.fetchProductByCatID();
+        },
+      );
+    }
+  }
+
   /**
-   * Capturar o valor do input e usa este valor como busca do query da API
+  * Captura o valor do input e usa este valor como query da API
   */
   handleSearch = async () => {
     const { searchQuery } = this.state;
@@ -50,19 +66,30 @@ class Home extends React.Component {
     }
   };
 
+  async fetchProductByCatID() {
+    const { searchQuery, categoryID } = this.state;
+    const data = await getProductsFromCategoryAndQuery(searchQuery, categoryID);
+    this.setState({ productsList: data.results });
+  }
+
   async fetchCategories() {
-    const categories = await getCategories();
+    const categoriesList = await getCategories();
     this.setState({
-      categories,
+      categoriesList,
     });
   }
 
   render() {
-    const { categories, loaded, productsList } = this.state;
+    const { categoriesList, loaded, productsList } = this.state;
     return (
       <div>
 
-        <input type="text" data-testid="query-input" onChange={ this.handleChange } />
+        <input
+          type="text"
+          data-testid="query-input"
+          name="searchQuery"
+          onChange={ this.handleChange }
+        />
         <button type="button" data-testid="query-button" onClick={ this.handleSearch }>
           Pesquisar
         </button>
@@ -96,8 +123,12 @@ class Home extends React.Component {
           )
         }
         <aside>
-          {categories
-            .map((category) => <AsideCats key={ category.id } name={ category.name } />)}
+          {categoriesList
+            .map((category) => (<AsideCats
+              key={ category.id }
+              name={ category.name }
+              handleCategoryClick={ this.handleCategoryClick }
+            />))}
         </aside>
       </div>
     );

@@ -13,7 +13,7 @@ class ShoppingCart extends Component {
       sum } = this.props;
     return (
       <div>
-        {!cartSaved ? (
+        {!cartSaved ? ( // default is false
           <p data-testid="shopping-cart-empty-message">
             Seu carrinho está vazio
           </p>
@@ -34,15 +34,19 @@ class ShoppingCart extends Component {
 }
 
 ShoppingCart.propTypes = {
-  cartSaved: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  })).isRequired,
-  deleteLocalStorageItem: PropTypes.func.isRequired,
-  handleDecrease: PropTypes.func.isRequired,
-  handleSum: PropTypes.func.isRequired,
-  sum: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-  })).isRequired,
+  cartSaved: PropTypes.bool,
+  deleteLocalStorageItem: PropTypes.func,
+  handleDecrease: PropTypes.func,
+  handleSum: PropTypes.func,
+  sum: PropTypes.string,
+};
+
+ShoppingCart.defaultProps = {
+  cartSaved: false,
+  deleteLocalStorageItem: () => { console.log('placeholder'); },
+  handleDecrease: () => { console.log('placeholder'); },
+  handleSum: () => { console.log('placeholder'); },
+  sum: 'teste',
 };
 
 export default ShoppingCart;
