@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AsideCats from '../Components/AsideCats';
+import ProductCards from '../Components/ProductCards';
 import {
   getProductsFromCategoryAndQuery,
   getCategories,
 } from '../services/api';
-import ProductCards from '../Components/ProductCards';
 
 class Home extends React.Component {
   constructor(props) {
@@ -112,6 +112,7 @@ class Home extends React.Component {
                   title={ el.title }
                   thumbnail={ el.thumbnail }
                   key={ el.id }
+                  id={ el.id }
                 />
                 ))
               }
