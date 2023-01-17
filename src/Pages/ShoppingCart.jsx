@@ -26,6 +26,7 @@ class ShoppingCart extends Component {
     const { cartSaved } = this.state;
     return (
       <div>
+        <Link data-testid="shopping-cart-button" to="/shoppingcart">Carrinho</Link>
         {!cartSaved ? ( // default is false
           <p data-testid="shopping-cart-empty-message">
             Seu carrinho está vazio
