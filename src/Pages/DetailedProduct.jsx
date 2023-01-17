@@ -2,18 +2,27 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getProductById } from '../services/api';
+import Rating from '../Components/Rating';
 
 class DetailedProduct extends React.Component {
   constructor() {
     super();
     this.state = {
       product: {},
+      path: '',
+      savedProducts: [],
     };
     this.getProductId = this.getProductId.bind(this);
   }
 
   componentDidMount() {
     this.getProductId();
+    const { match: { params: { productID } } } = this.props;
+    const getStorage = JSON.parse(localStorage.getItem(productID)) || [];
+    this.setState({
+      path: productID,
+      savedProducts: getStorage,
+    });
   }
 
   async getProductId() {
@@ -33,7 +42,7 @@ class DetailedProduct extends React.Component {
   };
 
   render() {
-    const { product: { title, thumbnail, price } } = this.state;
+    const { product: { title, thumbnail, price }, path, savedProducts } = this.state;
     return (
       <>
         <Link to="/">
@@ -53,6 +62,11 @@ class DetailedProduct extends React.Component {
           >
             Adicionar ao carrinho
           </button>
+
+          <Rating
+            productID={ path }
+            savedRatings={ savedProducts }
+          />
         </div>
       </>
     );
