@@ -24,6 +24,14 @@ class DetailedProduct extends React.Component {
     });
   }
 
+  addToCart = () => {
+    const { product: { title, price, thumbnail } } = this.state;
+    const product = { title, price, thumbnail };
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+  };
+
   render() {
     const { product: { title, thumbnail, price } } = this.state;
     return (
@@ -38,6 +46,13 @@ class DetailedProduct extends React.Component {
           <Link to="/shoppingcart">
             <button type="button" data-testid="shopping-cart-button">Carrinho</button>
           </Link>
+          <button
+            type="button"
+            data-testid="product-detail-add-to-cart"
+            onClick={ this.addToCart }
+          >
+            Adicionar ao carrinho
+          </button>
         </div>
       </>
     );
