@@ -4,13 +4,26 @@ import { Link } from 'react-router-dom';
 import CartItems from '../Components/CartItems';
 
 class ShoppingCart extends Component {
+  state = {
+    cartSaved: false,
+  };
+
+  componentDidMount() {
+    const getSavedCart = JSON.parse(localStorage.getItem('cart'));
+    if (getSavedCart !== null && getSavedCart.length > 0) {
+      this.setState({ cartSaved: true });
+    } else {
+      this.setState({ cartSaved: false });
+    }
+  }
+
   render() {
     const {
-      cartSaved,
       deleteLocalStorageItem,
       handleDecrease,
       handleSum,
       sum } = this.props;
+    const { cartSaved } = this.state;
     return (
       <div>
         {!cartSaved ? ( // default is false
@@ -34,15 +47,13 @@ class ShoppingCart extends Component {
 }
 
 ShoppingCart.propTypes = {
-  cartSaved: PropTypes.bool,
   deleteLocalStorageItem: PropTypes.func,
   handleDecrease: PropTypes.func,
   handleSum: PropTypes.func,
   sum: PropTypes.string,
 };
-
+// Mano próxima vez que for fazer isso avisa onde vai usar props
 ShoppingCart.defaultProps = {
-  cartSaved: false,
   deleteLocalStorageItem: () => { console.log('placeholder'); },
   handleDecrease: () => { console.log('placeholder'); },
   handleSum: () => { console.log('placeholder'); },

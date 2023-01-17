@@ -70,6 +70,7 @@ class Home extends React.Component {
     const { searchQuery, categoryID } = this.state;
     const data = await getProductsFromCategoryAndQuery(searchQuery, categoryID);
     this.setState({ productsList: data.results });
+    console.log(data.results);
   }
 
   async fetchCategories() {
@@ -113,6 +114,7 @@ class Home extends React.Component {
                   thumbnail={ el.thumbnail }
                   key={ el.id }
                   id={ el.id }
+                  quantity={ el.available_quantity }
                 />
                 ))
               }

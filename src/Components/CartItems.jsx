@@ -1,70 +1,35 @@
-// import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
-// class CartItems extends Component {
-//   render() {
-//     const {
-//       cartSaved, deleteLocalStorageItem, handleDecrease, handleSum, sum,
-//     } = this.props;
+export default class CartItems extends Component {
+  state = {
+    cart: [],
+  };
 
-//     return (
-//       <div>
-//         <div>
-//           {cartSaved.map(({ id, title, thumbnail }, index) => (
-//             <div key={ Math.random() } id={ index }>
-//               <img alt={ id } src={ thumbnail } />
-//               <p data-testid="shopping-cart-product-name">{ title }</p>
+  componentDidMount() {
+    const getStorage = JSON.parse(localStorage.getItem('cart'));
+    this.setState({ cart: getStorage });
+  }
 
-//               <button
-//                 type="button"
-//                 data-testid="product-increase-quantity"
-//                 onClick={ handleSum }
-//               >
-//                 +
-
-//               </button>
-//               <p
-//                 data-testid="shopping-cart-product-quantity"
-//               >
-//                 { sum.length > 0 && `${sum[index][id].quantity}` }
-
-//               </p>
-//               <button
-//                 type="button"
-//                 data-testid="product-decrease-quantity"
-//                 onClick={ handleDecrease }
-//               >
-//                 -
-
-//               </button>
-//               <button
-//                 type="button"
-//                 data-testid="remove-product"
-//                 onClick={ deleteLocalStorageItem }
-//               >
-//                 Deletar
-
-//               </button>
-
-//             </div>
-//           ))}
-//         </div>
-
-//       </div>
-//     );
-//   }
-// }
-
-// CartItems.propTypes = {
-//   cartSaved: PropTypes.arrayOf(PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//   })).isRequired,
-//   deleteLocalStorageItem: PropTypes.func.isRequired,
-//   handleDecrease: PropTypes.func.isRequired,
-//   handleSum: PropTypes.func.isRequired,
-//   sum: PropTypes.arrayOf(PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//   })).isRequired,
-// };
-
-// export default CartItems;
+  // se o carrinho tiver itens, renderiza o carrinho
+  render() {
+    const { cart } = this.state;
+    return (
+      <div>
+        {cart.length > 0 && (
+          <div>
+            <h1>Cart</h1>
+            <ul>
+              {cart.map((item) => (
+                <li key={ item.id }>
+                  <p data-testid="shopping-cart-product-name">{item.title}</p>
+                  <p>{item.price}</p>
+                  <p data-testid="shopping-cart-product-quantity">1</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
+}
