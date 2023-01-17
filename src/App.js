@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './Pages/Home';
 import ShoppingCart from './Pages/ShoppingCart';
 import DetailedProduct from './Pages/DetailedProduct';
+import Checkout from './Pages/Checkout';
 import './App.css';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
           path="/product-details/:productID"
           render={ (props) => <DetailedProduct { ...props } /> }
         />
+        <Route path="/checkout" component={ Checkout } />
       </Switch>
     </div>
   );

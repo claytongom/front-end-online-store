@@ -9,6 +9,11 @@ class ProductCards extends Component {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
+    const getCartStorage = JSON.parse(localStorage.getItem('cart'));
+    const cartLength = getCartStorage.length;
+
+    const cartQuantity = document.querySelector('[data-testid="shopping-cart-size"]');
+    cartQuantity.innerText = cartLength;
   };
 
   render() {
@@ -24,6 +29,7 @@ class ProductCards extends Component {
           data-testid="product-add-to-cart"
           type="button"
           onClick={ this.addToCart }
+          id={ id }
         >
           Adicionar ao carrinho
         </button>

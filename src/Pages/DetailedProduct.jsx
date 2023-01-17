@@ -11,6 +11,7 @@ class DetailedProduct extends React.Component {
       product: {},
       path: '',
       savedProducts: [],
+      quantityCart: 0,
     };
     this.getProductId = this.getProductId.bind(this);
   }
@@ -19,9 +20,11 @@ class DetailedProduct extends React.Component {
     this.getProductId();
     const { match: { params: { productID } } } = this.props;
     const getStorage = JSON.parse(localStorage.getItem(productID)) || [];
+    const getCartStorage = JSON.parse(localStorage.getItem('cart')) || [];
     this.setState({
       path: productID,
       savedProducts: getStorage,
+      quantityCart: getCartStorage.length,
     });
   }
 
@@ -39,10 +42,16 @@ class DetailedProduct extends React.Component {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
+    const getCartStorage = JSON.parse(localStorage.getItem('cart'));
+    const cartLength = getCartStorage.length;
+
+    const cartQuantity = document.querySelector('[data-testid="shopping-cart-size"]');
+    cartQuantity.innerText = cartLength;
   };
 
   render() {
-    const { product: { title, thumbnail, price }, path, savedProducts } = this.state;
+    const { product: { title, thumbnail, price },
+      path, savedProducts, quantityCart } = this.state;
     return (
       <>
         <Link to="/">
@@ -55,6 +64,7 @@ class DetailedProduct extends React.Component {
           <Link to="/shoppingcart">
             <button type="button" data-testid="shopping-cart-button">Carrinho</button>
           </Link>
+          <span data-testid="shopping-cart-size">{quantityCart}</span>
           <button
             type="button"
             data-testid="product-detail-add-to-cart"

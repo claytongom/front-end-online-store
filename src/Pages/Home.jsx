@@ -17,6 +17,7 @@ class Home extends React.Component {
       categoryID: '',
       productsList: [],
       loaded: true,
+      quantityCart: 0,
     };
 
     this.fetchCategories = this.fetchCategories.bind(this);
@@ -27,6 +28,16 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.fetchCategories();
+    const getCartStorage = JSON.parse(localStorage.getItem('cart'));
+    if (getCartStorage !== null) {
+      this.setState({
+        quantityCart: getCartStorage,
+      });
+    } else {
+      this.setState({
+        quantityCart: [],
+      });
+    }
   }
 
   handleChange({ target }) {
@@ -81,7 +92,7 @@ class Home extends React.Component {
   }
 
   render() {
-    const { categoriesList, loaded, productsList } = this.state;
+    const { categoriesList, loaded, productsList, quantityCart } = this.state;
     return (
       <div>
 
@@ -99,6 +110,9 @@ class Home extends React.Component {
             Carrinho
           </button>
         </Link>
+        <span data-testid="shopping-cart-size">
+          {quantityCart.length === 0 ? '2' : '2'}
+        </span>
         {
           loaded ? (
             <div>

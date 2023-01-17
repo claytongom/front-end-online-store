@@ -24,6 +24,7 @@ class ShoppingCart extends Component {
       handleSum,
       sum } = this.props;
     const { cartSaved } = this.state;
+
     return (
       <div>
         <Link data-testid="shopping-cart-button" to="/shoppingcart">Carrinho</Link>
