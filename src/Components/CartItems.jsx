@@ -1,70 +1,120 @@
-// import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
-// class CartItems extends Component {
-//   render() {
-//     const {
-//       cartSaved, deleteLocalStorageItem, handleDecrease, handleSum, sum,
-//     } = this.props;
+export default class CartItems extends Component {
+  state = {
+    cart: [],
+    quantitye: [],
+  };
 
-//     return (
-//       <div>
-//         <div>
-//           {cartSaved.map(({ id, title, thumbnail }, index) => (
-//             <div key={ Math.random() } id={ index }>
-//               <img alt={ id } src={ thumbnail } />
-//               <p data-testid="shopping-cart-product-name">{ title }</p>
+  componentDidMount() {
+    const getStorage = JSON.parse(localStorage.getItem('cart'));
+    this.setState({ cart: getStorage });
+    if (getStorage.length > 0) {
+      const quantity = getStorage.reduce((acc, { id }) => {
+        if (acc[id]) {
+          acc[id] += 1;
+        } else {
+          acc[id] = 1;
+        }
+        return acc;
+      }, {});
+      this.setState({ quantitye: quantity });
+    }
+  }
 
-//               <button
-//                 type="button"
-//                 data-testid="product-increase-quantity"
-//                 onClick={ handleSum }
-//               >
-//                 +
+  handleIncrease = ({ target }) => {
+    const { id } = target;
+    const { cart, quantitye } = this.state;
+    const newQuantity = { ...quantitye };
+    // find by id
+    const item = cart.find((items) => items.id === id);
+    console.log(item.quantity);
+    console.log(newQuantity[id]);
 
-//               </button>
-//               <p
-//                 data-testid="shopping-cart-product-quantity"
-//               >
-//                 { sum.length > 0 && `${sum[index][id].quantity}` }
+    if (newQuantity[id] < item.quantity) {
+      newQuantity[id] += 1;
+    } else {
+      newQuantity[id] = item.quantity;
+    }
+    this.setState({ quantitye: newQuantity });
+    localStorage.setItem('cart', JSON.stringify(cart));
+  };
 
-//               </p>
-//               <button
-//                 type="button"
-//                 data-testid="product-decrease-quantity"
-//                 onClick={ handleDecrease }
-//               >
-//                 -
+  handleDecrease = ({ target }) => {
+    const { id } = target;
+    const { cart, quantitye } = this.state;
+    const newQuantity = { ...quantitye };
+    console.log(newQuantity[id]);
 
-//               </button>
-//               <button
-//                 type="button"
-//                 data-testid="remove-product"
-//                 onClick={ deleteLocalStorageItem }
-//               >
-//                 Deletar
+    if (newQuantity[id] > 1) {
+      newQuantity[id] -= 1;
+    } else {
+      newQuantity[id] = 1;
+    }
 
-//               </button>
+    this.setState({ quantitye: newQuantity });
+    localStorage.setItem('cart', JSON.stringify(cart));
+  };
 
-//             </div>
-//           ))}
-//         </div>
+  handleRemove = ({ target }) => {
+    const { id } = target;
+    const { cart, quantity } = this.state;
+    const newCart = cart.filter((item) => item.id !== id);
+    const newQuantity = { ...quantity };
+    delete newQuantity[id];
+    this.setState({ cart: newCart, quantity: newQuantity });
+    localStorage.setItem('cart', JSON.stringify(newCart));
+  };
 
-//       </div>
-//     );
-//   }
-// }
+  // se o carrinho tiver itens, renderiza o carrinho
+  render() {
+    const { cart, quantitye } = this.state;
+    return (
+      <div>
+        {cart.length > 0 && (
+          <div>
+            <h1>Cart</h1>
+            <ul>
+              {cart.map((item) => (
+                <li key={ item.id }>
+                  <p data-testid="shopping-cart-product-name">{item.title}</p>
 
-// CartItems.propTypes = {
-//   cartSaved: PropTypes.arrayOf(PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//   })).isRequired,
-//   deleteLocalStorageItem: PropTypes.func.isRequired,
-//   handleDecrease: PropTypes.func.isRequired,
-//   handleSum: PropTypes.func.isRequired,
-//   sum: PropTypes.arrayOf(PropTypes.shape({
-//     id: PropTypes.string.isRequired,
-//   })).isRequired,
-// };
+                  <p>{item.price}</p>
 
-// export default CartItems;
+                  <button
+                    data-testid="product-increase-quantity"
+                    type="button"
+                    id={ item.id }
+                    onClick={ this.handleIncrease }
+                  >
+                    +
+                  </button>
+                  <p data-testid="shopping-cart-product-quantity">
+                    {quantitye[item.id]}
+                  </p>
+                  <button
+                    data-testid="product-decrease-quantity"
+                    type="button"
+                    id={ item.id }
+                    onClick={ this.handleDecrease }
+                  >
+                    -
+                  </button>
+
+                  <button
+                    data-testid="remove-product"
+                    type="button"
+                    id={ item.id }
+                    onClick={ this.handleRemove }
+                  >
+                    Remover
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
+}
