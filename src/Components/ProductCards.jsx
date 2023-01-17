@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 class ProductCards extends Component {
   addToCart = () => {
-    const { title, thumbnail, price, id, quantity } = this.props;
-    const product = { title, thumbnail, price, id, quantity };
+    const { title, thumbnail, price, id, quantity, shipping } = this.props;
+    const product = { title, thumbnail, price, id, quantity, shipping };
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart.push(product);
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -17,13 +17,15 @@ class ProductCards extends Component {
   };
 
   render() {
-    const { title, thumbnail, price, id } = this.props;
+    const { title, thumbnail, price, id, shipping } = this.props;
+    console.log(shipping);
     return (
       <div data-testid="product">
         <Link data-testid="product-detail-link" to={ `/product-details/${id}` }>
           <h3>{title}</h3>
           <img src={ thumbnail } alt={ title } />
           <p>{price}</p>
+          {shipping && <p data-testid="free-shipping">Frete Grátis</p>}
         </Link>
         <button
           data-testid="product-add-to-cart"
@@ -43,6 +45,9 @@ ProductCards.propTypes = {
   thumbnail: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   quantity: PropTypes.number.isRequired,
+  shipping: PropTypes.shape({
+    free_shipping: PropTypes.bool.isRequired,
+  }).isRequired,
 };
 
 export default ProductCards;

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class CartItems extends Component {
   state = {
     cart: [],
-    quantity: [],
+    quantitye: [],
   };
 
   componentDidMount() {
@@ -18,24 +18,33 @@ export default class CartItems extends Component {
         }
         return acc;
       }, {});
-      this.setState({ quantity });
+      this.setState({ quantitye: quantity });
     }
   }
 
   handleIncrease = ({ target }) => {
     const { id } = target;
-    console.log(id);
-    const { cart, quantity } = this.state;
-    const newQuantity = { ...quantity };
-    newQuantity[id] += 1;
-    this.setState({ quantity: newQuantity });
+    const { cart, quantitye } = this.state;
+    const newQuantity = { ...quantitye };
+    // find by id
+    const item = cart.find((items) => items.id === id);
+    console.log(item.quantity);
+    console.log(newQuantity[id]);
+
+    if (newQuantity[id] < item.quantity) {
+      newQuantity[id] += 1;
+    } else {
+      newQuantity[id] = item.quantity;
+    }
+    this.setState({ quantitye: newQuantity });
     localStorage.setItem('cart', JSON.stringify(cart));
   };
 
   handleDecrease = ({ target }) => {
     const { id } = target;
-    const { cart, quantity } = this.state;
-    const newQuantity = { ...quantity };
+    const { cart, quantitye } = this.state;
+    const newQuantity = { ...quantitye };
+    console.log(newQuantity[id]);
 
     if (newQuantity[id] > 1) {
       newQuantity[id] -= 1;
@@ -43,7 +52,7 @@ export default class CartItems extends Component {
       newQuantity[id] = 1;
     }
 
-    this.setState({ quantity: newQuantity });
+    this.setState({ quantitye: newQuantity });
     localStorage.setItem('cart', JSON.stringify(cart));
   };
 
@@ -59,7 +68,7 @@ export default class CartItems extends Component {
 
   // se o carrinho tiver itens, renderiza o carrinho
   render() {
-    const { cart, quantity } = this.state;
+    const { cart, quantitye } = this.state;
     return (
       <div>
         {cart.length > 0 && (
@@ -81,7 +90,7 @@ export default class CartItems extends Component {
                     +
                   </button>
                   <p data-testid="shopping-cart-product-quantity">
-                    {quantity[item.id]}
+                    {quantitye[item.id]}
                   </p>
                   <button
                     data-testid="product-decrease-quantity"

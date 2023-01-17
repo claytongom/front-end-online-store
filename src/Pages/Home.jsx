@@ -93,6 +93,7 @@ class Home extends React.Component {
 
   render() {
     const { categoriesList, loaded, productsList, quantityCart } = this.state;
+    console.log(productsList);
     return (
       <div>
 
@@ -129,6 +130,7 @@ class Home extends React.Component {
                   key={ el.id }
                   id={ el.id }
                   quantity={ el.available_quantity }
+                  shipping={ el.shipping.free_shipping }
                 />
                 ))
               }
